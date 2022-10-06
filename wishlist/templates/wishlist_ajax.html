@@ -1,0 +1,103 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<style>
+    a:link {
+      color: black;
+      background-color: transparent;
+      text-decoration: none;
+    }
+    a:visited {
+      color: white;
+      background-color: transparent;
+      text-decoration: none;
+    }
+    a:hover {
+      color: white;
+      background-color: transparent;
+      text-decoration: underline;
+    }
+    a:active {
+      color: black;
+      background-color: transparent;
+      text-decoration: underline;
+    }
+</style>
+<!DOCTYPE html>
+<html lang="en">
+<body style="background-color:#33475b">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>tes</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+</head>
+
+<nav class="navbar navbar-expand-lg py-3 my-3 bg-dark text-white">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">Navbar</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavDropdown">
+            <span class="navbar-text bg-dark text-white p-2 mr-auto">
+                {{nama}}
+            </span>
+            <ul class="navbar-nav ">
+                <li class="nav-item">
+                    <button type="button" class="btn btn-secondary"><a href="{% url 'wishlist:logout' %}">Logout</a></button>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="container-fluid border py-3 my-3 bg-dark text-white">
+<h5>Nama: </h5>
+<b>{{nama}}</b>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script>
+    $(document).ready(function(){
+        $.ajax({
+            url: 'http://127.0.0.1:8000/wishlist/json/',
+            dataType: 'json',
+            type : 'GET',
+            success: function(data){
+                var data1 = JSON.stringify(data);
+                var data2 = JSON.parse(data1);
+                console.log(data2[1].fields['nama_barang'])
+                for (var i=0; i<data.length; i++){
+                    var row = $('<tr><td>' + data2[i].fields['nama_barang'] + '</td><td>' + data2[i].fields['harga_barang'] + '</td><td>' + data2[i].fields['deskripsi'] + '</td><td></tr>')
+                    console.log(row )
+                    $('#tableajax').append(row)
+                    
+                }
+            }
+        }
+
+        )
+    })
+</script>
+
+<div class = "table-responsive-md ">
+    <table id = "tableajax" class="table table-bordered table-hover table-secondary">
+        <tr class = table-dark>
+            <th >Nama Barang</th>
+            <th>Harga Barang</th>
+            <th>Deskripsi</th>
+        </tr>
+
+    </table>
+</div>
+
+<div class="container-fluid border py-3 my-3 bg-dark text-white">
+    <h5>Sesi terakhir login: {{ last_login }}</h5>
+    <button type="button" class="btn btn-secondary"><a href="{% url 'wishlist:logout' %}">Logout</a></button>
+</div>
+</html>
+</body>
+{% endblock content %}
